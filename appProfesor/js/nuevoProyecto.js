@@ -139,7 +139,8 @@ function aniadirBBDDProyecto(datosFormdata) {
             $('#busquedaCiclo').val('');
             $('#descripcion').val('');
             $('#busquedaCurso').val('');
-            $('#listaEtiquetas').empty();            
+            $('#listaEtiquetas').empty();    
+            etiquetas.length = 0;        
                  
         } else {
             $(span).removeAttr("class");
