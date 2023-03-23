@@ -7,9 +7,9 @@
 -- Versión del servidor: 10.4.24-MariaDB-log
 -- Versión de PHP: 7.4.29
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+-- START TRANSACTION;
+-- SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -59,7 +59,7 @@ CREATE TABLE `profesores` (
 --
 
 INSERT INTO `profesores` (`id`, `nombre`, `email`, `pswrd`, `administrador`) VALUES
-(1, 'Administrador', 'admin@domain.ext', '6a98cc272ca60c0457966324aef82962cf1f89764a84eba85a53e0c4bdce7d15', 1),
+(1, 'Administrador', 'admin@domain.ext', '6a98cc272ca60c0457966324aef82962cf1f89764a84eba85a53e0c4bdce7d15', 1);
 
 -- --------------------------------------------------------
 
@@ -108,25 +108,6 @@ ALTER TABLE `proyectos`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
---
--- AUTO_INCREMENT de la tabla `permisos`
---
-ALTER TABLE `permisos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de la tabla `profesores`
---
-ALTER TABLE `profesores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `proyectos`
---
-ALTER TABLE `proyectos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
