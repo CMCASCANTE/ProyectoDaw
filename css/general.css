@@ -1,0 +1,329 @@
+/*
+* CUSTOM CSS
+*/
+
+/*
+*   CSS General
+*/ 
+/* enlaces de la parte superior de la web */
+a {
+    color: #264B7F;
+    letter-spacing: -1px;
+    font-weight: 600;
+    line-height: 1em;
+    font-family: Open Sans,Arial,sans-serif;
+}
+.headRow {
+    background-color: #F5F5F5; 
+    font-size: small;
+}
+
+
+/* boton de busqueda principal y login*/
+#hook:hover, #btnAcceso:hover {
+    border: none;
+    background-color: #77BCE7;
+    color: white; 
+}
+#hook, #btnAcceso {
+    border: none;
+    background-color: #264B7F; 
+    color: white; 
+    border-radius: 39px;
+}
+
+
+/* botones del panl de editar */
+.editarProyecto:hover, .descargarProyecto:hover, .btnNoGuardar:hover, .btnGuardarEditar:hover, .editarArchivo:hover {
+    color: #77BCE7;
+    background-color: transparent;
+    border: none;
+}
+.editarProyecto, .descargarProyecto, .btnNoGuardar, .btnGuardarEditar, .editarArchivo {
+    color: #264B7F;
+    background-color: transparent;
+    border: none;
+}
+.btnEliminar:hover {
+    color: #ff9393;
+    background-color: transparent;
+    border: none;
+}
+.btnEliminar {
+    color: #cc2737;
+    background-color: transparent;
+    border: none;
+}
+
+/* botones de añadir etiqueta */
+.btnEditarEtiqueta, #btnEtiqueta {
+    border: none;
+    background-color: #264B7F;
+    color: white;
+    border-radius: 0 0.375em 0.375em 0;
+    padding: 0.25em;
+}
+.btnEditarEtiqueta:hover, #btnEtiqueta:hover {
+    color: black;
+    background-color: #77BCE7;
+    border: none;
+}
+.btnEditarEtiqueta:active, #btnEtiqueta:active {
+    color: black;
+    background-color: #77BCE7;
+    border: none;
+    scale: 0.9;
+}
+#busquedaEtiqueta, .editarEtiqueta {
+   border-top-right-radius: 0;
+   border-bottom-right-radius: 0;
+} 
+
+
+/* Tags */
+.tagDiv {
+    padding: 0 0 0 6px ;    
+    background-color: #264B7F;
+    border-radius: 39px ;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    color: #fff;
+    font-size: 0.8em;
+    font-family: "Lucida Grande","Lucida Sans Unicode",Verdana,sans-serif;
+    border: 1px outset #264B7F;
+    font-weight: bold;    
+    margin: 0.5em !important;
+}
+.tags { 
+    color: #fff;
+    border: none;
+    background-color: transparent;
+}
+.tagsX {
+    color: #fff;
+    border: none;
+    border-left: 1px solid white;
+    border-radius: 39px;
+    background-color: transparent;
+    
+}
+.tagsX:hover {
+    color: black;
+    background-color: #77BCE7;   
+    border-left: 1px solid #77BCE7; 
+}
+.tagsNube {
+    color:#264B7F !important;
+    cursor: pointer;
+    transform: scale(1.3) !important;
+    z-index: 1;
+}
+
+
+/* Paginado */
+.divPag {
+    color: #264B7F;
+}
+.estiloPag button{
+    border: none !important;
+    color: #264B7F;
+}
+.estiloPag button:active {
+    border: none !important;
+}
+.estiloPag button:hover {
+    border: none !important;
+    scale: 1.5;
+    color: #77BCE7;
+}
+
+
+/* Canvas */
+#modalVisor .modal-content {
+    width: auto;    
+}
+
+
+
+/* CSS Varios */
+.busquedaRow {    
+    background-color:#F5F5F5;
+    box-shadow: 0 0 0.5em #264B7F;
+}
+
+#buscador, .headRow, #formNuevoProy, #datosUsuario, #gestionProfesores, #pie, .imgCol {
+    background-color: #F5F5F5;
+    box-shadow: 0 0 0.5em #264B7F;
+}
+
+.mensajeFade{
+    animation: fadeIn 5s forwards;       
+}    
+.guardando {
+    animation: guardando 3s infinite;
+}
+.form-control, .form-select {
+    border: none;
+    box-shadow: 0 0 0 0.05rem lightgrey
+}
+.form-control:focus, .form-select:focus {
+    border: none;
+    box-shadow: 0 0 0 0.15rem #264B7F  
+}
+
+
+/* icono usuario */
+.userConf {    
+    color: #264B7F;
+}
+.userConf:hover {
+    cursor: pointer;
+    color: #77BCE7;
+}
+.form-check-input:checked {
+    background-color: #264B7F;
+}
+
+/* pie de pagina */
+#pie {
+    background-color: #1C375E;
+    color: white;
+    margin-top: 3em;
+}
+
+
+
+/* animaciones */
+@keyframes fadeIn {
+    0% { 
+        color: red;
+    }
+    50% { 
+        opacity: 1; 
+        color: red;
+    }
+    100% { 
+        opacity: 0; 
+        color: red;
+    }
+}
+@keyframes guardando {
+    0% { 
+        opacity: 1;
+    }
+    50% { 
+        opacity: 0;         
+    }
+    100% { 
+        opacity: 1;         
+    }
+}
+
+
+
+/*
+*   CSS animacion de carga principal
+*/
+.loader {
+    font-size: 5px;
+    margin: 30% auto;
+    text-indent: -9999em;
+    width: 11em;
+    height: 11em;
+    border-radius: 50%;
+    background: #264B7F;
+    background: -moz-linear-gradient(left, #264B7F 10%, rgba(255, 255, 255, 0) 42%);
+    background: -webkit-linear-gradient(left, #264B7F 10%, rgba(255, 255, 255, 0) 42%);
+    background: -o-linear-gradient(left, #264B7F 10%, rgba(255, 255, 255, 0) 42%);
+    background: -ms-linear-gradient(left, #264B7F 10%, rgba(255, 255, 255, 0) 42%);
+    background: linear-gradient(to right, #264B7F 10%, rgba(255, 255, 255, 0) 42%);
+    position: relative;
+    -webkit-animation: load3 1.4s infinite linear;
+    animation: load3 1.4s infinite linear;
+}
+.loader:before {
+    width: 50%;
+    height: 50%;
+    background: #264B7F;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+}
+.loader:after {
+    background: #fff;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+@-webkit-keyframes load3 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes load3 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+
+/*
+*   CSS responsive
+*/
+
+@media screen and (max-width:768px) {
+    /* cabecero */
+    .headRow {
+        display: none;
+    }
+    #pie {
+        display: none;
+    }
+     /* Canvas */
+     /*.canvasPortada {
+        /* evitar que cargue el modal del pdf
+        pointer-events: none;
+        
+    }  */  
+    #modalVisor .modal-content {     
+        overflow: scroll;
+    }
+    #modalVisor .modal-dialog {
+        max-width: none;
+    }     
+    /* nube de etiquetas */
+    #nubeEtiquetas {
+        display: none;
+    }
+}
+
+@media screen and (max-width:576px) {
+   
+}
+
+@media screen and (min-width:768px) {    
+    /* Canvas */
+    .canvasPortada:hover {
+        scale: 1.2;
+        cursor: pointer;        
+    }
+}
