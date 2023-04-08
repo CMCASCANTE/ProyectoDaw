@@ -141,9 +141,26 @@
                         <textarea class="form-control flex-grow-1" id="descripcion" style="min-height:6em" placeholder="Añade una descripción..." maxlength="1000"></textarea>                        
                     </div>
                     <div class="col-12 col-sm-8 col-md-6 col-lg-2 offset-0 offset-sm-2 offset-md-3 offset-lg-0 mb-2 mb-lg-0 order-1 order-lg-2">
-                        <select class="form-select text-star text-lg-end" id="busquedaCurso">
-                            <!-- options en selectCursos() del js -->
-                        </select>                        
+                        <div>
+                            <select class="form-select text-star text-lg-end" id="busquedaCurso">
+                                <!-- options en selectCursos() del js -->
+                            </select>                                                    
+                        </div>
+                        <div>
+                            <select class="form-select text-star text-lg-end mt-2" id="busquedaNota">
+                                <option selected value=''>Nota...</option>
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                                <option value='6'>6</option>
+                                <option value='7'>7</option>
+                                <option value='8'>8</option>
+                                <option value='9'>9</option>
+                                <option value='10'>10</option>
+                            </select>                                                    
+                        </div>                        
                     </div>
                 </div>                            
                 <div class="row">   

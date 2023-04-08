@@ -12,6 +12,7 @@
     $descripcion = $_POST["descripcion"];
     $ciclo = $_POST["ciclo"];
     $curso = $_POST["curso"]; 
+    $nota = $_POST["nota"]; 
     $alumno = $_POST["alumno"];
     $etiquetas = $_POST["etiquetas"];
 
@@ -43,10 +44,10 @@
             unlink('../../archivos/'.$nombreArchivoOriginal);
             move_uploaded_file($archivoTemporal, '../../archivos/'.$id."_".$nombreArchivo);
             // creamos la consulta actualizando la url del archivo
-            $consulta = $conBBDD -> prepare("UPDATE proyectos SET nombre='".$nombre."', descripcion='".$descripcion."', ciclo='".$ciclo."', curso='".$curso."', alumno='".$alumno."', etiquetas='".$etiquetas."', archivo_PDF='".$id."_".$nombreArchivo."' WHERE id =". $id);    
+            $consulta = $conBBDD -> prepare("UPDATE proyectos SET nombre='".$nombre."', descripcion='".$descripcion."', ciclo='".$ciclo."', curso='".$curso."', nota='".$nota."', alumno='".$alumno."', etiquetas='".$etiquetas."', archivo_PDF='".$id."_".$nombreArchivo."' WHERE id =". $id);    
         } else {
             // si no hay archivo actualizmos el resto de campos
-            $consulta = $conBBDD -> prepare("UPDATE proyectos SET nombre='".$nombre."', descripcion='".$descripcion."', ciclo='".$ciclo."', curso='".$curso."', alumno='".$alumno."', etiquetas='".$etiquetas."' WHERE id =". $id);
+            $consulta = $conBBDD -> prepare("UPDATE proyectos SET nombre='".$nombre."', descripcion='".$descripcion."', ciclo='".$ciclo."', curso='".$curso."', nota='".$nota."', alumno='".$alumno."', etiquetas='".$etiquetas."' WHERE id =". $id);
         }
         // ejecutamos la consulta
         $consulta -> execute();              

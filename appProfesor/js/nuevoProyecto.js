@@ -23,6 +23,7 @@ function confirmarAniadir() {
     const alumno = $('#alumno').val();
     const curso = $('#busquedaCurso').val();
     const ciclo = $('#busquedaCiclo').val();
+    const nota = $('#busquedaNota').val();
     const descripcion = $('#descripcion').val();
     const archivo = $('#subirArchivo')[0].files[0];
     const arrayEtiquetas = $('#listaEtiquetas').children().children("input[type='text']").toArray();
@@ -58,6 +59,12 @@ function confirmarAniadir() {
         $(span).addClass('text-danger');
         return;
     }        
+    if (nota === "") {
+        $(span).html('Tienes que darle una nota');
+        $(span).removeAttr("class");
+        $(span).addClass('text-danger');
+        return;
+    }        
     if (descripcion === "" || descripcion.length>1000) {
         $(span).html('Tienes que poner una descripción(máximo 1000 caracteres)');
         $(span).removeAttr("class");
@@ -79,6 +86,7 @@ function confirmarAniadir() {
     formData.append('alumno', alumno);
     formData.append('curso', curso);
     formData.append('ciclo', ciclo);
+    formData.append('nota', nota);
     formData.append('descripcion', descripcion);
     formData.append('etiquetas', valorEtiquetas.join(" "));
     
@@ -139,6 +147,7 @@ function aniadirBBDDProyecto(datosFormdata) {
             $('#busquedaCiclo').val('');
             $('#descripcion').val('');
             $('#busquedaCurso').val('');
+            $('#busquedaNota').val('');
             $('#listaEtiquetas').empty();    
             etiquetas.length = 0;        
                  
@@ -339,15 +348,6 @@ function selectCursos(){
     $('#busquedaCurso').append(optionsAnio);
 }
 selectCursos();
-
-
-
-
-
-
-
-
-
 
 
 

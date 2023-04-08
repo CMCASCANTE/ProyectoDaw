@@ -6,12 +6,10 @@
 
 
     //variables para las consultas    
-    $datos = [];    
+    $datos = [];
     $nombre = $_POST["nombre"];
     $ciclo = $_POST["ciclo"];
-    $curso = $_POST["curso"];  
-    $lim1 = $_POST["resultIni"];
-    $lim2 = $_POST["resultFin"];
+    $curso = $_POST["curso"];      
     $etiquetas = "";
     if (isset($_POST["etiquetas"])) {
         $listaEtiquetas = $_POST["etiquetas"];
@@ -23,8 +21,6 @@
     // tratamos las comillas simples para que se puedan añadir
     $nombre = str_replace("'","\'",$nombre);        
     $etiquetas = str_replace("'","\'",$etiquetas);
-
-    //sleep(5);
 
     // conexion con la base de datos
     try {        
@@ -39,11 +35,11 @@
     // select para obtener la lista de proyectos
     try {
         // consulta preparada
-        $consulta = $conBBDD -> prepare("SELECT * FROM proyectos WHERE (nombre like'%". $nombre ."%' OR alumno like'%". $nombre ."%') 
-                                        AND ciclo like'%". $ciclo ."%' AND curso like'%". $curso ."%' ". $etiquetas ." LIMIT ". $lim1 . "," . $lim2);            
+        $consulta = $conBBDD -> prepare("SELECT COUNT(*) FROM proyectos WHERE (nombre like'%". $nombre ."%' OR alumno like'%". $nombre ."%') 
+        AND ciclo like'%". $ciclo ."%' AND curso like'%". $curso ."%' ". $etiquetas);            
         $consulta -> execute();           
         // por defecto devuelve un array numerico y otro asociativo, ocn esta opcion solo devolvemos el asociativo
-        $datos = $consulta -> fetchAll(PDO::FETCH_ASSOC);            
+        $datos = $consulta -> fetch(PDO::FETCH_ASSOC);            
     } catch (Exception $e) {
         $datos = "Se ha producido el siguiente error: " . $e -> getMessage();        
     }
@@ -59,7 +55,7 @@
 
 
 
-    // salida de datos en JSON     
+    // salida de datos en JSON    
     echo json_encode($datos);    
 
 ?>

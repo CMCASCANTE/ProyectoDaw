@@ -122,6 +122,7 @@
                 <?php 
                     if ($_SESSION['administrador']) {
                         print ('<div class="row" id="permDescarga"></div>');
+                        print ('<div class="row" id="permNotas"></div>');
                     }
                 ?>
             </div>

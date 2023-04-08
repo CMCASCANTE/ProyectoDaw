@@ -34,42 +34,25 @@ function mostrar(proyectoEliminado = '') {
     // peticion ajax para obtener la lista de proyectos segun lo que se busque
     $.ajax({
         type: "POST",
-        url: "../assets/librerias/BBDD/listarProyectos.php",
+        url: "../assets/librerias/BBDD/listarProyectosCount.php",
         data: {nombre: nombre, ciclo: ciclo, curso: curso, etiquetas: valorEtiquetas},
-        dataType: "json",
-        // mientras esperamos la respuesta...
-        beforeSend: ()=> {
-            if ($('#paginado')) {
-                $('#paginado').remove();
-            }        
-            $('#resultados').append(
-                $('<div>', {'class': 'col-2'}).append(
-                    $('<div>', {'class': 'loader'})
-                )
-            )          
-        }           
+        dataType: "json"       
     }) // manejo del resultado de la petición
-    .done(function(data) {    
-        const numRows = data['num'];
-        const rows = data['rows'];
+    .done(function(data) {                 
+        const numRows = data['COUNT(*)'];  
+        const nResultados = numRows;
+        const nPaginas = Math.ceil(nResultados/5);            
+        let paginaActual = 1;   
 
-        // eliminamos el contenido anterior (loader)
-        $("#resultados").empty();
-        
         // eliminamos la opcion de paginado para que no se repita si existe
-        if ($('#paginado')) {
-            $('#paginado').remove();
+        if ($('.paginado')) {
+            $('.paginado').remove();
         }        
 
-        // paginado
-        if (numRows>5) {
-            // numero resultados
-            const nResultados = rows.length;
-            const nPaginas = Math.ceil(nResultados/5);            
-            let paginaActual = 1;   
-            
+        // si hay mas de 5 posibles resultados cargamos la paginación
+        if (numRows > 5) {    
             // guardamos el paginado para añadirlo despues tanto al principio como al final            
-            const pag = $('<div>', {'class': 'col-md-8', 'id': 'paginado'}).append(
+            const pag = $('<div>', {'class': 'col-md-8 paginado'}).append(
                     $('<div>', {'class': 'row justify-content-between align-items-end'}).append(                
                         $('<div>', {'class': 'col-6'}).append(
                             $('<span>', {'id': 'proyectoEliminado'})
@@ -77,13 +60,14 @@ function mostrar(proyectoEliminado = '') {
                         $('<div>', {'class': 'col-6 divPag'}).append(
                             $('<div>', {'class': 'row justify-content-end'}).append(                                
                                 $('<div>', {'class': 'col-auto g-0 estiloPag'}).append(
-                                    $('<button>', {'class': 'btn fs-4 ps-0 fw-light', 'html': '&laquo'}).click(()=>{
-                                        $("#resultados").empty();                                                    
+                                    $('<button>', {'class': 'btn fs-4 ps-0 fw-light', 'html': '&laquo'}).click(()=>{                                                                                           
                                         if (paginaActual>1){                                
                                             paginaActual--;
+                                            $("#resultados").empty(); 
+                                            $(".nPaginas").html(paginaActual + '...' + nPaginas);
+                                            // listamos los primeros 5 resultados de la búsqueda
+                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, ((paginaActual-1)*5)+5)
                                         }
-                                        $(".nPaginas").html(paginaActual + '...' + nPaginas);
-                                        buscadorMostrarResultados(rows.slice((paginaActual-1)*5, ((paginaActual-1)*5)+5));
                                         window.location.href = "#hook";
                                     })
                                 ),
@@ -91,17 +75,18 @@ function mostrar(proyectoEliminado = '') {
                                     $('<span>', {'class': 'nPaginas fw-light', 'id': '1nPaginas', 'html': '1...' + nPaginas})
                                 ),
                                 $('<div>', {'class': 'col-auto g-0 estiloPag'}).append(
-                                    $('<button>', {'class': 'btn fs-4 pe-0 fw-light', 'html': '&raquo'}).click(()=>{
-                                        $("#resultados").empty();                                                    
+                                    $('<button>', {'class': 'btn fs-4 pe-0 fw-light', 'html': '&raquo'}).click(()=>{                                        
                                         if (paginaActual<nPaginas){                                
                                             paginaActual++;
+                                            $("#resultados").empty();                                                    
+                                            // listamos los primeros 5 resultados de la búsqueda
+                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, ((paginaActual-1)*5)+5)
                                         }
                                         if (paginaActual===nPaginas){
                                             $(".nPaginas").html(paginaActual + '/' + nPaginas);
                                         } else {
                                             $(".nPaginas").html(paginaActual + '...' + nPaginas);
-                                        }
-                                        buscadorMostrarResultados(rows.slice((paginaActual-1)*5, ((paginaActual-1)*5)+5));                                
+                                        }                                                   
                                         window.location.href = "#hook";
                                     })
                                 )                                
@@ -111,36 +96,35 @@ function mostrar(proyectoEliminado = '') {
                 )            
             $('#paginacion').append($(pag).clone(true))
             $('#paginacionPie').append($(pag).clone(true))
-            
 
-            // listamos los primeros 5 resultados de la búsqueda
-            buscadorMostrarResultados(rows.slice(0, 5));
+        // si no hay mas de 5 resultados cargamos los que haya o indicamos que no hay en caso de ser 0    
         } else {
-            // si no se encuentran resultados muestra mensaje 
-            if (numRows<1) {
+            console.log("asdasd")
+            if (numRows == 0) {
                 $('#paginacion').append(
-                    $('<div>', {'class': 'col-md-8', 'id': 'paginado'}).append(
+                    $('<div>', {'class': 'col-md-8 paginado'}).append(
                         $('<span>', {'class': 'text-danger', 'html': 'No se han encontrado resultados...'}).append(         
 
                         )
                     )
                 )
             } else {
-                // creamos el span de elementos eliminados
+                // creamos el span de elementos eliminados por si lo llegamos a usar
                 $('#paginacion').append(
-                    $('<div>', {'class': 'col-md-8', 'id': 'paginado'}).append(
+                    $('<div>', {'class': 'col-md-8 paginado'}).append(
                         $('<div>', {'class': 'row align-items-end'}).append(                
                             $('<div>', {'class': 'col-6'}).append(
                                 $('<span>', {'id': 'proyectoEliminado'})
                             )                               
                         )
                     )
-                )
-
-                // listamos los resultados de la búsqueda
-                buscadorMostrarResultados(rows)
+                )               
             }
-        }
+        }       
+
+        // listamos los primeros 5 resultados de la búsqueda
+        resultPag(nombre, ciclo, curso, valorEtiquetas, 0, 5)
+
         
         // Si acbamos de eliminar un proyecto 
         if (proyectoEliminado) {
@@ -151,13 +135,40 @@ function mostrar(proyectoEliminado = '') {
 
         // movemos la vista de la web al inicio del buscador
         window.location.href = "#hook";
+        
     }) // manejo de errores en la petición 
     .fail(function(textStatus, errorThrown ) {            
         console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
     }) 
 }
+// Funcion para cargar el numero de resultados indicado (lim1, lim2)
+function resultPag(nombre, ciclo, curso, valorEtiquetas, lim1, lim2){
+    // peticion para mostrar los resultados
+    $.ajax({
+        type: "POST",
+        url: "../assets/librerias/BBDD/listarProyectos.php",
+        data: {nombre: nombre, ciclo: ciclo, curso: curso, etiquetas: valorEtiquetas, resultIni: lim1, resultFin: lim2},
+        dataType: "json",
+        // mientras esperamos la respuesta...
+        beforeSend: ()=> {           
+            $('#resultados').append(
+                $('<div>', {'class': 'col-2'}).append(
+                    $('<div>', {'class': 'loader'})
+                )
+            )          
+        }           
+    }) // manejo del resultado de la petición
+    .done(function(data) {   
 
+        // eliminamos el contenido anterior (loader)
+        $("#resultados").empty();
+        // mostramos los resultados
+        buscadorMostrarResultados(data);
 
+    }).fail(function(textStatus, errorThrown ) {            
+        console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
+    })         
+}
 
 
 
@@ -263,19 +274,22 @@ function lineaResultado(proyecto){
         $('<div>', {'class': 'row  h-100 justify-content-center', 'id': 'proy_'+proyecto.id}).append(
             // portada pdf
             $('<div>', {'class': 'col-4 col-md-2 p-2'}).append(                    
-                $('<canvas>', {'id': 'canvas_'+proyecto.id, 'class': 'canvasPortada'}).click(function(){visorPDF(archivo)})
+                $('<canvas>', {'id': 'canvas_'+proyecto.id, 'class': 'canvasPortada'}).click(function(){visorPDF(archivo)}),
+                $('<div>', {'class': 'col-12 d-flex'}).append(
+                    $('<p>', {'html': 'Calificación: '+proyecto.nota})
+                ),                  
             ), 
             // datos proyecto
             $('<div>', {'class': 'col-12 col-sm-8 col-md-10'}).append(
                  // nombre - alumno - curso
-                 $('<div>', {'class': 'row mt-1'}).append(                    
+                 $('<div>', {'class': 'row mt-1'}).append(   
                     $('<div>', {'class': 'col-sm-6 align-self-start text-center fw-bold text-uppercase fs-5 text-break'}).append(
                         $('<p>', {'html': proyecto.nombre})
                     ),
                     $('<div>', {'class': 'col-sm-4 align-self-start fw-semibold text-break'}).append(
                         $('<p>', {'html': proyecto.alumno})
                     ),
-                    $('<div>', {'class': 'col-sm-2 text-end align-self-end fw-semibold d-none d-md-block'}).append(
+                    $('<div>', {'class': 'col-sm-2 text-end fw-semibold d-none d-md-block'}).append(
                         $('<p>', {'html': proyecto.curso})
                     )
                 ),
@@ -286,10 +300,10 @@ function lineaResultado(proyecto){
                     ),
                     $('<div>', {'class': 'col-md-2 text-end align-self-start fw-semibold d-none d-md-block'}).append(
                         $('<p>', {'html': proyecto.ciclo})
-                    )
+                    )                    
                 ),
                 // etiquetas - editar/descargar proyecto
-                $('<div>', {'class': 'row mb-1'}).append(                    
+                $('<div>', {'class': 'row mb-1'}).append(
                     $('<div>', {'class': 'col-3 col-sm-9 ps-5 pe-4 d-none d-md-block'}).append(
                         $('<div>', {'class': 'row'}).append(
                             divEtiquetas
@@ -348,8 +362,8 @@ function lineaResultado(proyecto){
  * crea el formulario con los datos actuales del proyecto a editar 
  */
 function  formularioEditarProyecto(data) {
-    // CREACION DE SELECTS PARA FECHAS Y CURSOS    
-    // options para fechas y cursos
+    // CREACION DE SELECTS PARA FECHAS, CURSOS Y NOTAS
+    // options para fechas, cursos y notas
     const optionsAnio = [];        
     anio.forEach(option => {            
         if (option===data.curso){
@@ -366,6 +380,15 @@ function  formularioEditarProyecto(data) {
             optionsCiclo.push("<option value='" + option + "'>" + option + "</option>");
         }
     });
+    const optionsNota = [];  
+    for (let index = 1; index <= 10; index++) {
+        if (index===parseInt(data.nota)){
+            optionsNota.push("<option selected value='" + index + "'>" + index + "</option>");
+        } else {
+            optionsNota.push("<option value='" + index + "'>" + index + "</option>");
+        }        
+    }      
+    
 
     // ETIQUETAS
     const editEtiquetas = data.etiquetas.split(" ");
@@ -401,6 +424,7 @@ function  formularioEditarProyecto(data) {
     });      
 
     // CREACION DE FORMULARIO DE EDICION HTML
+    console.log(data)                     
     const formularioProyecto = $('<div>', {'class': 'col', 'id': 'proy_edit_'+data.id}).append(
         // nombre - alumno - ciclo
         $('<div>', {'class': 'row mt-3 mb-3'}).append(
@@ -416,16 +440,23 @@ function  formularioEditarProyecto(data) {
                 )
             )            
         ),
-        // descripcion - curso
+        // descripcion - curso        
         $('<div>', {'class': 'row mb-3'}).append(
             $('<div>', {'class': 'col-10'}).append(
                 $('<textarea>', {'class': 'form-control flex-grow-1 editarDescripcion text-break', 'style': 'min-height:6em', 'id': 'proy_edit_descripcion_'+data.id, 'html': data.descripcion, 'maxlength': '1000'})
             ),
             $('<div>', {'class': 'col-2'}).append(
-                $('<select>', {'class': 'form-select text-end editarCiclo', 'id': 'proy_edit_ciclo_'+data.id}).append(
-                    optionsCiclo
-                )
-            )            
+                $('<div>', {'class': 'col-12'}).append(
+                    $('<select>', {'class': 'form-select text-end editarCiclo', 'id': 'proy_edit_ciclo_'+data.id}).append(
+                        optionsCiclo
+                    )
+                ),            
+                $('<div>', {'class': 'col-12'}).append(
+                    $('<select>', {'class': 'form-select text-end editarNota mt-2', 'id': 'proy_edit_nota_'+data.id}).append(
+                        optionsNota
+                    )
+                )            
+            )
         ),
         // añadir etiquetas
         $('<div>', {'class': 'row align-items-center'}).append(
@@ -607,6 +638,7 @@ function confirmarEditar(id, archivoOriginal) {
     formData.append('alumno', $('#proy_edit_alumno_'+id).val());
     formData.append('curso', $('#proy_edit_anio_'+id).val());
     formData.append('ciclo', $('#proy_edit_ciclo_'+id).val());
+    formData.append('nota', $('#proy_edit_nota_'+id).val());
     formData.append('descripcion', $('#proy_edit_descripcion_'+id).val());
     formData.append('etiquetas', valorEtiquetas.join(" "));
     // archivo

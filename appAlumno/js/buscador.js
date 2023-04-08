@@ -34,42 +34,25 @@ function mostrar(proyectoEliminado = '') {
     // peticion ajax para obtener la lista de proyectos segun lo que se busque
     $.ajax({
         type: "POST",
-        url: "../assets/librerias/BBDD/listarProyectos.php",
+        url: "../assets/librerias/BBDD/listarProyectosCount.php",
         data: {nombre: nombre, ciclo: ciclo, curso: curso, etiquetas: valorEtiquetas},
-        dataType: "json",
-        // mientras esperamos la respuesta...
-        beforeSend: ()=> {
-            if ($('#paginado')) {
-                $('#paginado').remove();
-            }        
-            $('#resultados').append(
-                $('<div>', {'class': 'col-2'}).append(
-                    $('<div>', {'class': 'loader'})
-                )
-            )          
-        }           
+        dataType: "json"       
     }) // manejo del resultado de la petición
-    .done(function(data) {    
-        const numRows = data['num'];
-        const rows = data['rows'];
+    .done(function(data) {                 
+        const numRows = data['COUNT(*)'];  
+        const nResultados = numRows;
+        const nPaginas = Math.ceil(nResultados/5);            
+        let paginaActual = 1;   
 
-        // eliminamos el contenido anterior (loader)
-        $("#resultados").empty();
-        
         // eliminamos la opcion de paginado para que no se repita si existe
-        if ($('#paginado')) {
-            $('#paginado').remove();
+        if ($('.paginado')) {
+            $('.paginado').remove();
         }        
 
-        // paginado
-        if (numRows>5) {
-            // numero resultados
-            const nResultados = rows.length;
-            const nPaginas = Math.ceil(nResultados/5);            
-            let paginaActual = 1;   
-            
+        if (numRows > 5) {
+        
             // guardamos el paginado para añadirlo despues tanto al principio como al final            
-            const pag = $('<div>', {'class': 'col-md-8', 'id': 'paginado'}).append(
+            const pag = $('<div>', {'class': 'col-md-8 paginado'}).append(
                     $('<div>', {'class': 'row justify-content-between align-items-end'}).append(                
                         $('<div>', {'class': 'col-6'}).append(
                             $('<span>', {'id': 'proyectoEliminado'})
@@ -77,13 +60,14 @@ function mostrar(proyectoEliminado = '') {
                         $('<div>', {'class': 'col-6 divPag'}).append(
                             $('<div>', {'class': 'row justify-content-end'}).append(                                
                                 $('<div>', {'class': 'col-auto g-0 estiloPag'}).append(
-                                    $('<button>', {'class': 'btn fs-4 ps-0 fw-light', 'html': '&laquo'}).click(()=>{
-                                        $("#resultados").empty();                                                    
+                                    $('<button>', {'class': 'btn fs-4 ps-0 fw-light', 'html': '&laquo'}).click(()=>{                                                                                         
                                         if (paginaActual>1){                                
                                             paginaActual--;
-                                        }
-                                        $(".nPaginas").html(paginaActual + '...' + nPaginas);
-                                        buscadorMostrarResultados(rows.slice((paginaActual-1)*5, ((paginaActual-1)*5)+5));
+                                            $("#resultados").empty();   
+                                            $(".nPaginas").html(paginaActual + '...' + nPaginas);
+                                            // listamos los primeros 5 resultados de la búsqueda
+                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, ((paginaActual-1)*5)+5)                                            
+                                        }                                        
                                         window.location.href = "#hook";
                                     })
                                 ),
@@ -91,17 +75,18 @@ function mostrar(proyectoEliminado = '') {
                                     $('<span>', {'class': 'nPaginas fw-light', 'id': '1nPaginas', 'html': '1...' + nPaginas})
                                 ),
                                 $('<div>', {'class': 'col-auto g-0 estiloPag'}).append(
-                                    $('<button>', {'class': 'btn fs-4 pe-0 fw-light', 'html': '&raquo'}).click(()=>{
-                                        $("#resultados").empty();                                                    
+                                    $('<button>', {'class': 'btn fs-4 pe-0 fw-light', 'html': '&raquo'}).click(()=>{                                                                                         
                                         if (paginaActual<nPaginas){                                
                                             paginaActual++;
+                                            $("#resultados").empty();  
+                                            // listamos los primeros 5 resultados de la búsqueda
+                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, ((paginaActual-1)*5)+5)                                        
                                         }
                                         if (paginaActual===nPaginas){
                                             $(".nPaginas").html(paginaActual + '/' + nPaginas);
                                         } else {
                                             $(".nPaginas").html(paginaActual + '...' + nPaginas);
-                                        }
-                                        buscadorMostrarResultados(rows.slice((paginaActual-1)*5, ((paginaActual-1)*5)+5));                                
+                                        }                                                                   
                                         window.location.href = "#hook";
                                     })
                                 )                                
@@ -111,52 +96,56 @@ function mostrar(proyectoEliminado = '') {
                 )            
             $('#paginacion').append($(pag).clone(true))
             $('#paginacionPie').append($(pag).clone(true))
-            
-
-            // listamos los primeros 5 resultados de la búsqueda
-            buscadorMostrarResultados(rows.slice(0, 5));
         } else {
-            // si no se encuentran resultados muestra mensaje 
-            if (numRows<1) {
+            console.log("asdasd")
+            if (numRows == 0) {
                 $('#paginacion').append(
-                    $('<div>', {'class': 'col-md-8', 'id': 'paginado'}).append(
+                    $('<div>', {'class': 'col-md-8 paginado'}).append(
                         $('<span>', {'class': 'text-danger', 'html': 'No se han encontrado resultados...'}).append(         
 
                         )
                     )
-                )
-            } else {
-                // creamos el span de elementos eliminados
-                $('#paginacion').append(
-                    $('<div>', {'class': 'col-md-8', 'id': 'paginado'}).append(
-                        $('<div>', {'class': 'row align-items-end'}).append(                
-                            $('<div>', {'class': 'col-6'}).append(
-                                $('<span>', {'id': 'proyectoEliminado'})
-                            )                               
-                        )
-                    )
-                )
+                ) 
+            }  
+        }  
 
-                // listamos los resultados de la búsqueda
-                buscadorMostrarResultados(rows)
-            }
-        }
+        // listamos los primeros 5 resultados de la búsqueda
+        resultPag(nombre, ciclo, curso, valorEtiquetas, 0, 5)
+            
         
-        // Si acbamos de eliminar un proyecto 
-        if (proyectoEliminado) {
-            $('#proyectoEliminado').html('El proyecto ' + proyectoEliminado + ' ha sido eliminado');
-            //$('#proyectoEliminado').removeClass('mensajeFade');
-            $('#proyectoEliminado').addClass('mensajeFade');    
-        }
-
-        // movemos la vista de la web al inicio del buscador
-        window.location.href = "#hook";
     }) // manejo de errores en la petición 
     .fail(function(textStatus, errorThrown ) {            
         console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
     }) 
 }
+// Funcion para cargar el numero de resultados indicado (lim1, lim2)
+function resultPag(nombre, ciclo, curso, valorEtiquetas, lim1, lim2){
+    // peticion para mostrar los resultados
+    $.ajax({
+        type: "POST",
+        url: "../assets/librerias/BBDD/listarProyectos.php",
+        data: {nombre: nombre, ciclo: ciclo, curso: curso, etiquetas: valorEtiquetas, resultIni: lim1, resultFin: lim2},
+        dataType: "json",
+        // mientras esperamos la respuesta...
+        beforeSend: ()=> {           
+            $('#resultados').append(
+                $('<div>', {'class': 'col-2'}).append(
+                    $('<div>', {'class': 'loader'})
+                )
+            )          
+        }           
+    }) // manejo del resultado de la petición
+    .done(function(data) {   
 
+        // eliminamos el contenido anterior (loader)
+        $("#resultados").empty();
+        // mostramos los resultados
+        buscadorMostrarResultados(data);
+
+    }).fail(function(textStatus, errorThrown ) {            
+        console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
+    })         
+}
 
 
 
@@ -232,7 +221,7 @@ function lineaResultado(proyecto){
                     $('<div>', {'class': 'col-sm-4 align-self-start fw-semibold text-break'}).append(
                         $('<p>', {'html': proyecto.alumno})
                     ),
-                    $('<div>', {'class': 'col-sm-2 text-end align-self-end fw-semibold d-none d-md-block'}).append(
+                    $('<div>', {'class': 'col-sm-2 text-end fw-semibold d-none d-md-block'}).append(
                         $('<p>', {'html': proyecto.curso})
                     )
                 ),
@@ -271,6 +260,28 @@ function lineaResultado(proyecto){
                 $('<div>', {'class': 'col-3 d-flex align-items-end justify-content-end p-2'}).append(                        
                     $('<a>', {'class': 'btn btn-light ms-2 descargarProyecto', 'download': proyecto.archivo_PDF, 'html': 'Descargar', 'href': '../assets/archivos/' + proyecto.archivo_PDF})
                 )
+            )
+        } 
+
+    }) // manejo de errores en la petición 
+    .fail(function(textStatus, errorThrown ) {            
+        console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
+    })     
+
+    // añadimos la opción de ver la Nota segun el valor del permiso en la BBDD
+    $.ajax({
+        type: "POST",
+        url: "../assets/librerias/BBDD/permisoNotas.php",        
+        dataType: "json"        
+    }) // manejo del resultado de la petición
+    .done(function(data) {        
+        
+        // elementos para el switch on/off según el valor actual del permiso
+        if (data.valor === '1') {
+            $($($(resultado).children().children()[0])).append(
+                $('<div>', {'class': 'col-12 d-flex'}).append(
+                    $('<p>', {'html': 'Calificación: '+proyecto.nota})
+                ),       
             )
         } 
 

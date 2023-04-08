@@ -158,8 +158,7 @@ function permisosDescarga() {
         url: "../assets/librerias/BBDD/permisoDescarga.php",        
         dataType: "json"        
     }) // manejo del resultado de la petición
-    .done(function(data) {        
-        console.log(data.valor)
+    .done(function(data) {                
         // elementos para el switch on/off según el valor actual del permiso
         if (data.valor==='1') {            
             $(div).append(
@@ -184,10 +183,9 @@ function permisosDescarga() {
 }
 
 function permDescChange(event) {
-    const switchValor = event.currentTarget.checked ? 1 : 0;
-    console.log('asds')
+    const switchValor = event.currentTarget.checked ? 1 : 0;    
     // mandamos petición para cambiar el avlor del permiso
-    // modificamos la contraseña
+    // modificamos el valor
     $.ajax({
         type: "POST",
         url: "../assets/librerias/BBDD/permisoDescarga.php",
@@ -205,6 +203,70 @@ function permDescChange(event) {
     
 }
 permisosDescarga();
+
+
+
+
+
+
+/**
+ * Funciones para el permiso de mostrar notas
+ */
+function permisosNotas() {
+    // variable
+    const div = $('#permNotas');
+
+    // peticion para extraer el valor actual de los permisos
+    $.ajax({
+        type: "POST",
+        url: "../assets/librerias/BBDD/permisoNotas.php",        
+        dataType: "json"        
+    }) // manejo del resultado de la petición
+    .done(function(data) {                
+        // elementos para el switch on/off según el valor actual del permiso
+        if (data.valor==='1') {            
+            $(div).append(
+                $('<div>', {'class': 'col-12 col-sm-8 col-md-6 col-lg-4 offset-0 offset-sm-2 offset-md-3 offset-lg-4 mt-3 form-check form-switch mt-4'}).append(
+                    $('<label>', {'class': 'form-check-label', 'for': 'flexSwitchCheckChecked', 'html': 'Permiso de visualización de Notas'}),
+                    $('<input>', {'class': 'form-check-input ms-3 me-3', 'type': 'checkbox', 'role': 'switch', 'id': 'flexSwitchCheckChecked', 'checked': 'true'}).change(function(event){permNotasChange(event)})            
+                )
+            )
+        } else {            
+            $(div).append(
+                $('<div>', {'class': 'col-12 col-sm-8 col-md-6 col-lg-4 offset-0 offset-sm-2 offset-md-3 offset-lg-4 mt-3 form-check form-switch mt-4'}).append(
+                    $('<label>', {'class': 'form-check-label', 'for': 'flexSwitchCheckDefault', 'html': 'Permiso de visualización de Notas'}),
+                    $('<input>', {'class': 'form-check-input ms-3 me-3', 'type': 'checkbox', 'role': 'switch', 'id': 'flexSwitchCheckDefault'}).change(function(event){permNotasChange(event)})            
+                )
+            )
+        }
+
+    }) // manejo de errores en la petición 
+    .fail(function(textStatus, errorThrown ) {            
+        console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
+    }) 
+}
+
+function permNotasChange(event) {
+    const switchValor = event.currentTarget.checked ? 1 : 0;    
+    // mandamos petición para cambiar el valor del permiso
+    // modificamos el valor
+    $.ajax({
+        type: "POST",
+        url: "../assets/librerias/BBDD/permisoNotas.php",
+        data: {
+            permNotas: switchValor            
+        },
+        dataType: "json"        
+    }) // manejo del resultado de la petición
+    .done(function(data) { 
+        
+    }) // manejo de errores en la petición 
+    .fail(function(textStatus, errorThrown ) {            
+        console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
+    }) 
+    
+}
+permisosNotas();
 
 
 

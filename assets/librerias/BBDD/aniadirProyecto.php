@@ -12,6 +12,7 @@
     $descripcion = $_POST["descripcion"];
     $ciclo = $_POST["ciclo"];
     $curso = $_POST["curso"]; 
+    $nota = $_POST["nota"]; 
     $alumno = $_POST["alumno"];
     $etiquetas = $_POST["etiquetas"];
     $archivoTemporal = $_FILES['archivo']['tmp_name'];
@@ -40,7 +41,7 @@
         $dato = $consulta -> fetch(PDO::FETCH_ASSOC);  
                  
         // creamos la consulta actualizando la url del archivo        
-        $consulta = $conBBDD -> prepare("INSERT INTO proyectos(nombre,descripcion,ciclo,curso,alumno,etiquetas,archivo_PDF) VALUES ('".$nombre."', '".$descripcion."', '".$ciclo."', '".$curso."', '".$alumno."', '".$etiquetas."', '".$dato['Auto_increment']."_".$nombreArchivo."')");
+        $consulta = $conBBDD -> prepare("INSERT INTO proyectos(nombre,descripcion,ciclo,curso,alumno,etiquetas,archivo_PDF,nota) VALUES ('".$nombre."', '".$descripcion."', '".$ciclo."', '".$curso."', '".$alumno."', '".$etiquetas."', '".$dato['Auto_increment']."_".$nombreArchivo."', '".$nota."')");
         $datos = $consulta -> execute();   
         // movemos el archivo a su carpeta si el insert ha ido bien
         if ($datos) {
