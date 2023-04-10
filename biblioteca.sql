@@ -75,7 +75,8 @@ CREATE TABLE `proyectos` (
   `curso` varchar(9) NOT NULL,
   `alumno` varchar(100) NOT NULL,
   `etiquetas` varchar(256) NOT NULL,
-  `archivo_PDF` varchar(256) NOT NULL
+  `archivo_PDF` varchar(256) NOT NULL,
+  `notas` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
