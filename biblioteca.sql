@@ -38,7 +38,7 @@ CREATE TABLE `permisos` (
 --
 
 INSERT INTO `permisos` (`permiso`, `valor`, `id`) VALUES
-('descarga', 1, 1)('notas', 1, 2);
+('descarga', 1, 1),('notas', 1, 2);
 
 -- --------------------------------------------------------
 
