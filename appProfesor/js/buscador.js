@@ -381,7 +381,7 @@ function  formularioEditarProyecto(data) {
         }
     });
     const optionsNota = [];  
-    for (let index = 1; index <= 10; index++) {
+    for (let index = 0; index <= 10; index++) {
         if (index===parseInt(data.nota)){
             optionsNota.push("<option selected value='" + index + "'>" + index + "</option>");
         } else {
