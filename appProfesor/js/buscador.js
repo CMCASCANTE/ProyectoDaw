@@ -295,7 +295,7 @@ function lineaResultado(proyecto){
                 ),
                 // descripcion - ciclo
                 $('<div>', {'class': 'row'}).append(   
-                    $('<div>', {'class': 'col-md-10 align-self-start fw-light', 'style': 'min-height:6em text-break'}).append(
+                    $('<div>', {'class': 'col-md-10 align-self-start fw-light textAreaCss', 'style': 'text-break'}).append(
                         $('<p>', {'html': proyecto.descripcion})
                     ),
                     $('<div>', {'class': 'col-md-2 text-end align-self-start fw-semibold d-none d-md-block'}).append(

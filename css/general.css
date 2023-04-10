@@ -170,6 +170,10 @@ a {
     box-shadow: 0 0 0 0.15rem #264B7F  
 }
 
+.textAreaCss {
+    min-height:7em;
+}
+
 
 /* icono usuario */
 .userConf {    
