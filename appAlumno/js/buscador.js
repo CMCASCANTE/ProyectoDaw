@@ -2,6 +2,32 @@
  * JS para la página del buscador
  */
 
+
+// cargas iniciales de JS
+window.onload = function () {  
+
+    // añadir al input de busquedas que cargue al pulsar intro
+    $( "#busquedaNombre" ).keypress(function( event ) {
+        if ( event.which == 13 ) {
+           event.preventDefault();
+           $('#hook').click();
+        }
+    })
+
+    // añadir al input de añadir etiuquetas que las añada al pulsar intro
+    $( "#busquedaEtiqueta" ).keypress(function( event ) {
+        if ( event.which == 13 ) {
+           event.preventDefault();
+           $('#btnEtiqueta').click();
+        }
+    })
+}    
+  
+
+
+
+
+
 // datos de uso general
 const etiquetas = [];
 
@@ -208,7 +234,7 @@ function lineaResultado(proyecto){
     const resultado = $('<div>', {'class': 'col-lg-10 col-xl-8 col-xxl-8 mt-4 busquedaRow'}).append(
         $('<div>', {'class': 'row  h-100 justify-content-center', 'id': 'proy_'+proyecto.id}).append(
             // portada pdf
-            $('<div>', {'class': 'col-4 col-md-2 p-2'}).append(                    
+            $('<div>', {'class': 'col-4 col-md-2 p-2 position-relative'}).append(                    
                 $('<canvas>', {'id': 'canvas_'+proyecto.id, 'class': 'canvasPortada'}).click(function(){visorPDF(archivo)})
             ), 
             // datos proyecto
@@ -276,12 +302,22 @@ function lineaResultado(proyecto){
     }) // manejo del resultado de la petición
     .done(function(data) {        
         
-        // elementos para el switch on/off según el valor actual del permiso
-        if (data.valor === '1') {
+        // elementos para el switch on/off según el valor actual del permiso    
+        if (data.valor === '1') {   
             $($($(resultado).children().children()[0])).append(
-                $('<div>', {'class': 'col-12 d-flex'}).append(
-                    $('<p>', {'html': 'Calificación: '+proyecto.nota})
-                ),       
+                // div para la nota, le damos el mismo aspecto que las etiquetas
+                $('<div>', {'class': 'col-3 m-auto p-auto fs-5 tagDiv position-absolute top-0'}).append(
+                    $('<input>', {
+                        'class': 'tags',
+                        'type': 'text', 
+                        'size': proyecto.nota.length,
+                        'disabled': true,
+                        'value': proyecto.nota
+                    }),
+                ) // añadimos CSS para cuadrar la posicion
+                .css({'cssText': 'margin-top: 1em !important'})     
+                .css("padding-left", proyecto.nota === "10" ? "2px" : "8px") // cuadramos el valor de la nota en el div segun si tiene 1 dígito o 2    
+                .css("width", "35px") 
             )
         } 
 

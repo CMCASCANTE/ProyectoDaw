@@ -14,6 +14,19 @@ window.onload = function () {
       }  
     );       
   
+    // añadir la opcion de que cargue los datos de login al pulsar intro estando en los inputs correspondientes
+    $( "#user" ).keypress(function( event ) {
+      if ( event.which == 13 ) {
+         event.preventDefault();
+         $('#btnAcceso').click();
+      }
+    })
+    $( "#password" ).keypress(function( event ) {
+      if ( event.which == 13 ) {
+         event.preventDefault();
+         $('#btnAcceso').click();
+      }
+    })
 }    
 
 
@@ -54,8 +67,7 @@ function parseJwt (token) {
 // login de profesor
 function loginProfesor() {
     const user = $('#user').val();
-    const password = $('#password').val();
-    const nombre = "test";
+    const password = $('#password').val();    
   
     if (user==="" || password==="") {
       $('#loginProfesores').empty();
@@ -89,6 +101,8 @@ function loginProfesor() {
       }) // manejo de errores en la petición 
       .fail(function(textStatus, errorThrown ) {            
           console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
+          $('#loginProfesores').empty();
+          $('#loginProfesores').append("<div class='col-auto d-inline alert alert-danger m-3'>Ha habido un error, intentalo de nuevo mas tarde</div>");
       })     
     }
 
