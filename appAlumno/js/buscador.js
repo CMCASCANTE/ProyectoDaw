@@ -234,8 +234,8 @@ function lineaResultado(proyecto){
     const resultado = $('<div>', {'class': 'col-lg-10 col-xl-8 col-xxl-8 mt-4 busquedaRow'}).append(
         $('<div>', {'class': 'row  h-100 justify-content-center', 'id': 'proy_'+proyecto.id}).append(
             // portada pdf
-            $('<div>', {'class': 'col-4 col-md-2 p-2 position-relative'}).append(                    
-                $('<canvas>', {'id': 'canvas_'+proyecto.id, 'class': 'canvasPortada'}).click(function(){visorPDF(archivo)})
+            $('<div>', {'class': 'col-4 col-md-2 p-2 position-relative canvasPortadaDiv'}).append(                    
+                $('<canvas>', {'id': 'canvas_'+proyecto.id, 'class': 'canvasPortada position-relative'}).click(function(){visorPDF(archivo)})
             ), 
             // datos proyecto
             $('<div>', {'class': 'col-12 col-sm-8 col-md-10'}).append(

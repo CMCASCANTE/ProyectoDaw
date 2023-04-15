@@ -300,10 +300,10 @@ function lineaResultado(proyecto){
     const resultado = $('<div>', {'class': 'col-lg-10 col-xl-8 col-xxl-8 mt-4 busquedaRow'}).append(
         $('<div>', {'class': 'row  h-100 justify-content-center', 'id': 'proy_'+proyecto.id}).append(
             // portada pdf
-            $('<div>', {'class': 'col-4 col-md-2 p-2 position-relative'}).append(                    
-                $('<canvas>', {'id': 'canvas_'+proyecto.id, 'class': 'canvasPortada'}).click(function(){visorPDF(archivo)}),
-                 // div para la nota, le damos el mismo aspecto que las etiquetas
-                 $('<div>', {'class': 'col-3 m-auto p-auto fs-5 tagDiv position-absolute top-0'}).append(
+            $('<div>', {'class': 'col-4 col-md-2 p-2 position-relative canvasPortadaDiv'}).append(                    
+                $('<canvas>', {'id': 'canvas_'+proyecto.id, 'class': 'canvasPortada position-relative'}).click(function(){visorPDF(archivo)}),
+                // div para la nota, le damos el mismo aspecto que las etiquetas
+                $('<div>', {'class': 'col-3 m-auto p-auto fs-5 tagDiv position-absolute top-0'}).append(
                     $('<input>', {
                         'class': 'tags',
                         'type': 'text', 
@@ -314,7 +314,7 @@ function lineaResultado(proyecto){
                 ) // añadimos CSS para cuadrar la posicion
                 .css({'cssText': 'margin-top: 1em !important'})     
                 .css("padding-left", proyecto.nota === "10" ? "2px" : "8px") // cuadramos el valor de la nota en el div segun si tiene 1 dígito o 2    
-                .css("width", "35px")               
+                .css("width", "35px")                               
             ), 
             // datos proyecto
             $('<div>', {'class': 'col-12 col-sm-8 col-md-10'}).append(
