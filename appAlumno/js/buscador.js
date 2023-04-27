@@ -305,10 +305,10 @@ function lineaResultado(proyecto){
         // elementos para el switch on/off según el valor actual del permiso    
         if (data.valor === '1') {   
             $($($(resultado).children().children()[0])).append(
-                // div para la nota, le damos el mismo aspecto que las etiquetas
-                $('<div>', {'class': 'col-3 m-auto p-auto fs-5 tagDiv position-absolute top-0'}).append(
+                // div para la nota
+                $('<div>', {'class': 'col-3 m-auto p-auto fs-6 tagDivNotas position-absolute top-0'}).append(
                     $('<input>', {
-                        'class': 'tags',
+                        'class': 'tagNotas fw-bold',
                         'type': 'text', 
                         'size': proyecto.nota.length,
                         'disabled': true,
@@ -316,8 +316,8 @@ function lineaResultado(proyecto){
                     }),
                 ) // añadimos CSS para cuadrar la posicion
                 .css({'cssText': 'margin-top: 1em !important'})     
-                .css("padding-left", proyecto.nota === "10" ? "2px" : "8px") // cuadramos el valor de la nota en el div segun si tiene 1 dígito o 2    
-                .css("width", "35px") 
+                .css("padding-left", proyecto.nota === "10" ? "1px" : "7px") // cuadramos el valor de la nota en el div segun si tiene 1 dígito o 2    
+                .css("width", "27px") 
             )
         } 
 

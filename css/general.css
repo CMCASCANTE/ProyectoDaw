@@ -119,6 +119,24 @@ a {
 }
 
 
+/* tag notas */
+.tagDivNotas {
+    padding: 0 0 0 6px ;    
+    background-color: transparent;
+    border-radius: 39px ;
+    box-shadow: 2px 1px 3px rgba(0,0,0,0.2);    
+    font-size: 0.8em;
+    font-family: "Lucida Grande","Lucida Sans Unicode",Verdana,sans-serif;
+    border: none;    
+    margin: 0.5em !important;
+}
+.tagNotas { 
+    color: #264B7F;
+    border: none;
+    background-color: transparent;
+}
+
+
 /* Paginado */
 .divPag {
     color: #264B7F;

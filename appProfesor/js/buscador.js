@@ -302,10 +302,10 @@ function lineaResultado(proyecto){
             // portada pdf
             $('<div>', {'class': 'col-4 col-md-2 p-2 position-relative canvasPortadaDiv'}).append(                    
                 $('<canvas>', {'id': 'canvas_'+proyecto.id, 'class': 'canvasPortada position-relative'}).click(function(){visorPDF(archivo)}),
-                // div para la nota, le damos el mismo aspecto que las etiquetas
-                $('<div>', {'class': 'col-3 m-auto p-auto fs-5 tagDiv position-absolute top-0'}).append(
+                // div para la nota
+                $('<div>', {'class': 'col-3 m-auto p-auto fs-6 tagDivNotas position-absolute top-0'}).append(
                     $('<input>', {
-                        'class': 'tags',
+                        'class': 'tagNotas fw-bold',
                         'type': 'text', 
                         'size': proyecto.nota.length,
                         'disabled': true,
@@ -313,8 +313,8 @@ function lineaResultado(proyecto){
                     }),
                 ) // añadimos CSS para cuadrar la posicion
                 .css({'cssText': 'margin-top: 1em !important'})     
-                .css("padding-left", proyecto.nota === "10" ? "2px" : "8px") // cuadramos el valor de la nota en el div segun si tiene 1 dígito o 2    
-                .css("width", "35px")                               
+                .css("padding-left", proyecto.nota === "10" ? "1px" : "7px") // cuadramos el valor de la nota en el div segun si tiene 1 dígito o 2    
+                .css("width", "27px")                               
             ), 
             // datos proyecto
             $('<div>', {'class': 'col-12 col-sm-8 col-md-10'}).append(
@@ -500,11 +500,17 @@ function  formularioEditarProyecto(data) {
             $('<div>', {'class': 'col-4 pe-0 me-0'}).append(
                 $('<input>', {'class': 'form-control editarEtiqueta ', 'list':'datalistEtiquetas'+data.id, 'id': 'proy_val_etiqueta_'+data.id, 'type': 'text', 'placeholder': 'Etiqueta...', 'maxlength': '50'}).keyup(function(){this.value=sinEspacios(this.value)}).focus(()=>{datalistOptionsEditar(data.id)}).append(
                     $('<datalist>', {'id': 'datalistEtiquetas'+data.id})
-                )
+                // añadir al input la accion del intro (añadir etiqueta)    
+                ).keypress(function( event ) {
+                    if ( event.which == 13 ) {
+                       event.preventDefault();
+                       $('#proy_button_etiqueta_'+data.id).click();
+                    }
+                })
             ),
             $('<div>', {'class': 'col-auto p-0'}).append(                
                 //$('<button>', {'class': 'btn btn-light btnEditarEtiqueta', 'html': '+'}).click(function(){editarAniadirEtiquetas(data.id, editEtiquetas)})                    
-                $('<button>', {'class': 'btn btn-light btnEditarEtiqueta'}).click(function(){editarAniadirEtiquetas(data.id, editEtiquetas)}).append(
+                $('<button>', {'class': 'btn btn-light btnEditarEtiqueta', 'id': 'proy_button_etiqueta_'+data.id}).click(function(){editarAniadirEtiquetas(data.id, editEtiquetas)}).append(
                     $('#svgPlus').clone()
                 )
                 

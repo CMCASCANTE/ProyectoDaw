@@ -2,6 +2,25 @@
 * JS para la página del nuevo proyecto
 */
 
+
+
+
+// cargas iniciales de JS
+window.onload = function () {  
+
+    // añadir al input de añadir etiuquetas que las añada al pulsar intro
+    $( "#busquedaEtiqueta" ).keypress(function( event ) {
+        if ( event.which == 13 ) {
+           event.preventDefault();
+           $('#btnEtiqueta').click();
+        }
+    })
+}    
+
+
+
+
+
 // datos de uso general
 const etiquetas = [];
 
