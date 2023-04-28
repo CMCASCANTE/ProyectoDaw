@@ -1,4 +1,4 @@
 # Archivos PDF de los proyectos
 <Directory>
-    LimitRequestBody 0971520
+    LimitRequestBody 20971520
 </Directory>
