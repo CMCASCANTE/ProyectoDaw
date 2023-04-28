@@ -48,7 +48,6 @@ function confirmarProfesor(){
     const pass = $('#newPas').val();
     const span = $('#userSpan');  
 
-    console.log(user)
     // comprobamos valores, devolvemos error de no ser correctos
     if (nombre === "") {
         $(span).html('El nombre no puede estar vacío');

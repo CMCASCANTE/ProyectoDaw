@@ -22,6 +22,9 @@ window.onload = function () {
            $('#btnEtiqueta').click();
         }
     })
+
+    // cargamos una busqueda inicial al cargar la página
+    $('#hook').click();
 }    
 
 
@@ -74,8 +77,7 @@ function mostrar(proyectoEliminado = '') {
         // eliminamos la opcion de paginado para que no se repita si existe
         if ($('.paginado')) {
             $('.paginado').remove();
-        }        
-
+        }                                                                       
         // si hay mas de 5 posibles resultados cargamos la paginación
         if (numRows > 5) {    
             // guardamos el paginado para añadirlo despues tanto al principio como al final            
@@ -87,15 +89,16 @@ function mostrar(proyectoEliminado = '') {
                         $('<div>', {'class': 'col-6 divPag'}).append(
                             $('<div>', {'class': 'row justify-content-end'}).append(                                
                                 $('<div>', {'class': 'col-auto g-0 estiloPag'}).append(
-                                    $('<button>', {'class': 'btn fs-4 ps-0 fw-light', 'html': '&laquo'}).click(()=>{                                                                                           
+                                    $('<button>', {'class': 'btn fs-4 ps-0 fw-light', 'html': '&laquo'}).click(()=>{                                                                           
                                         if (paginaActual>1){                                
-                                            paginaActual--;
+                                            paginaActual--;                                            
                                             $("#resultados").empty(); 
                                             $(".nPaginas").html(paginaActual + '...' + nPaginas);
                                             // listamos los primeros 5 resultados de la búsqueda
-                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, ((paginaActual-1)*5)+5)
+                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, 5)
                                         }
                                         window.location.href = "#hook";
+                                        
                                     })
                                 ),
                                 $('<div>', {'class': 'col-auto align-self-center g-0 fs-5 estiloPagNum'}).append(
@@ -107,7 +110,7 @@ function mostrar(proyectoEliminado = '') {
                                             paginaActual++;
                                             $("#resultados").empty();                                                    
                                             // listamos los primeros 5 resultados de la búsqueda
-                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, ((paginaActual-1)*5)+5)
+                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, 5)
                                         }
                                         if (paginaActual===nPaginas){
                                             $(".nPaginas").html(paginaActual + '/' + nPaginas);
@@ -125,8 +128,7 @@ function mostrar(proyectoEliminado = '') {
             $('#paginacionPie').append($(pag).clone(true))
 
         // si no hay mas de 5 resultados cargamos los que haya o indicamos que no hay en caso de ser 0    
-        } else {
-            console.log("asdasd")
+        } else {            
             if (numRows == 0) {
                 $('#paginacion').append(
                     $('<div>', {'class': 'col-md-8 paginado'}).append(
@@ -264,10 +266,14 @@ function lineaResultado(proyecto){
             'disabled': true,
             'value': etiqueta,                        
         });                
-        // añadimos las etiquetas al div correspondiente
-        divEtiqueta.append(inputEtiqueta);    
-        // metemos el div en el array de divs
-        divEtiquetas.push(divEtiqueta)    
+        // añadimos las etiquetas al div correspondiente salvo que no haya etiquetas                
+        if (proyecto.etiquetas === ""){
+            // si no tiene etiquetas no hacemos nada para no añadir un div vacío
+        } else {
+            divEtiqueta.append(inputEtiqueta);    
+            // metemos el div en el array de divs
+            divEtiquetas.push(divEtiqueta)    
+        }        
     });    
 
     // manejo del pdf para mostrar la portada   
@@ -460,8 +466,7 @@ function  formularioEditarProyecto(data) {
         divEtiquetas.push(divEtiqueta)        
     });      
 
-    // CREACION DE FORMULARIO DE EDICION HTML
-    console.log(data)                     
+    // CREACION DE FORMULARIO DE EDICION HTML                      
     const formularioProyecto = $('<div>', {'class': 'col', 'id': 'proy_edit_'+data.id}).append(
         // nombre - alumno - ciclo
         $('<div>', {'class': 'row mt-3 mb-3'}).append(
@@ -508,8 +513,7 @@ function  formularioEditarProyecto(data) {
                     }
                 })
             ),
-            $('<div>', {'class': 'col-auto p-0'}).append(                
-                //$('<button>', {'class': 'btn btn-light btnEditarEtiqueta', 'html': '+'}).click(function(){editarAniadirEtiquetas(data.id, editEtiquetas)})                    
+            $('<div>', {'class': 'col-auto p-0'}).append(                                
                 $('<button>', {'class': 'btn btn-light btnEditarEtiqueta', 'id': 'proy_button_etiqueta_'+data.id}).click(function(){editarAniadirEtiquetas(data.id, editEtiquetas)}).append(
                     $('#svgPlus').clone()
                 )
@@ -648,10 +652,12 @@ function confirmarEditar(id, archivoOriginal) {
     const descripcion = $('#proy_edit_descripcion_'+id).val();
     const archivo = $('#proy_edit_archivo_'+id)[0].files[0];
     const arrayEtiquetas = $('#proy_edit_listaEtiquetas_'+id).children().children("input[type='text']").toArray();
+    // removemos posibles etiquetas vacias    
+    const arrayEtiquetasFiltrado = arrayEtiquetas.filter(etiqueta => etiqueta.value != "");    
     const valorEtiquetas = [];    
-    arrayEtiquetas.forEach(child => {
+    arrayEtiquetasFiltrado.forEach(child => {
         valorEtiquetas.push(child.value)
-    })       
+    })           
     const span = $('#proy_edit_span_'+id);    
     const formData = new FormData();
 
@@ -864,8 +870,7 @@ function confirmarEliminar(nombre, id) {
      $('#proy_modal_eliminar').modal('show');
 }
 function eliminarProyecto(nombre, id) {
-    const span = $('#proy_edit_span_'+id); 
-    console.log(id)
+    const span = $('#proy_edit_span_'+id);     
     // lanzamos peticion de eliminación de proyecto
     $.ajax({
         type: "POST",
@@ -1061,8 +1066,7 @@ function visorPDF(archivo) {
         pdf.getPage(pagina).then(function(page) {
             // obtenemos el canvas y le damos las dimensiones que tiene que tener (escalando el tamaño del pfg)
             const canvas = $('#canvasVisor')[0];               
-            const viewport = screen.width > 576 ? page.getViewport({scale: 1}) : page.getViewport({scale: 0.5});
-            console.log(screen.width)
+            const viewport = screen.width > 576 ? page.getViewport({scale: 1}) : page.getViewport({scale: 0.5});            
             const ctx = canvas.getContext('2d');          
             canvas.width = Math.floor(viewport.width);
             canvas.height = Math.floor(viewport.height);
@@ -1137,7 +1141,6 @@ function nubeEtiquetas(){
         arrEtiquetas.forEach(etiqueta => {nubeEtiquetas[etiqueta] = nubeEtiquetas[etiqueta] + 1 || 1}); 
         const jqwcloud = [];        
         
-        // JQWCLOUD - https://www.jqueryscript.net/text/Word-Tag-Cloud-Generator-jQWCloud.html#google_vignette
         // añadimos las palabras con su peso al array del cloud
         for (const key in nubeEtiquetas) {
             // por algun motivo que no entiendo esta recorriendo una funcion como si fuese una key (shuffle) y la añade, con esto nos aseguramos de que el valor sera un numero y solo un numero (shuffle no es un numero)

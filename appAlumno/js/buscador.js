@@ -21,6 +21,10 @@ window.onload = function () {
            $('#btnEtiqueta').click();
         }
     })
+
+    // cargamos una busqueda inicial al cargar la página
+    $('#hook').click();
+
 }    
   
 
@@ -92,7 +96,7 @@ function mostrar(proyectoEliminado = '') {
                                             $("#resultados").empty();   
                                             $(".nPaginas").html(paginaActual + '...' + nPaginas);
                                             // listamos los primeros 5 resultados de la búsqueda
-                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, ((paginaActual-1)*5)+5)                                            
+                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, 5)                                            
                                         }                                        
                                         window.location.href = "#hook";
                                     })
@@ -106,7 +110,7 @@ function mostrar(proyectoEliminado = '') {
                                             paginaActual++;
                                             $("#resultados").empty();  
                                             // listamos los primeros 5 resultados de la búsqueda
-                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, ((paginaActual-1)*5)+5)                                        
+                                            resultPag(nombre, ciclo, curso, valorEtiquetas, (paginaActual-1)*5, 5)                                        
                                         }
                                         if (paginaActual===nPaginas){
                                             $(".nPaginas").html(paginaActual + '/' + nPaginas);
@@ -122,8 +126,7 @@ function mostrar(proyectoEliminado = '') {
                 )            
             $('#paginacion').append($(pag).clone(true))
             $('#paginacionPie').append($(pag).clone(true))
-        } else {
-            console.log("asdasd")
+        } else {            
             if (numRows == 0) {
                 $('#paginacion').append(
                     $('<div>', {'class': 'col-md-8 paginado'}).append(
@@ -162,12 +165,10 @@ function resultPag(nombre, ciclo, curso, valorEtiquetas, lim1, lim2){
         }           
     }) // manejo del resultado de la petición
     .done(function(data) {   
-
         // eliminamos el contenido anterior (loader)
         $("#resultados").empty();
         // mostramos los resultados
         buscadorMostrarResultados(data);
-
     }).fail(function(textStatus, errorThrown ) {            
         console.log( "La solicitud a fallado: " +  textStatus + " Error: " + errorThrown);
     })         
@@ -198,10 +199,14 @@ function lineaResultado(proyecto){
             'disabled': true,
             'value': etiqueta,                        
         });                
-        // añadimos las etiquetas al div correspondiente
-        divEtiqueta.append(inputEtiqueta);    
-        // metemos el div en el array de divs
-        divEtiquetas.push(divEtiqueta)    
+        // añadimos las etiquetas al div correspondiente salvo que no haya etiquetas                
+        if (proyecto.etiquetas === ""){
+            // si no tiene etiquetas no hacemos nada para no añadir un div vacío
+        } else {
+            divEtiqueta.append(inputEtiqueta);    
+            // metemos el div en el array de divs
+            divEtiquetas.push(divEtiqueta)    
+        }        
     });    
 
     // manejo del pdf para mostrar la portada   
@@ -637,7 +642,6 @@ function nubeEtiquetas(){
         arrEtiquetas.forEach(etiqueta => {nubeEtiquetas[etiqueta] = nubeEtiquetas[etiqueta] + 1 || 1}); 
         const jqwcloud = [];        
         
-        // JQWCLOUD - https://www.jqueryscript.net/text/Word-Tag-Cloud-Generator-jQWCloud.html#google_vignette
         // añadimos las palabras con su peso al array del cloud
         for (const key in nubeEtiquetas) {
             // por algun motivo que no entiendo esta recorriendo una funcion como si fuese una key (shuffle) y la añade, con esto nos aseguramos de que el valor sera un numero y solo un numero (shuffle no es un numero)

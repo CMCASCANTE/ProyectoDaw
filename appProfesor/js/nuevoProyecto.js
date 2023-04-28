@@ -46,10 +46,12 @@ function confirmarAniadir() {
     const descripcion = $('#descripcion').val();
     const archivo = $('#subirArchivo')[0].files[0];
     const arrayEtiquetas = $('#listaEtiquetas').children().children("input[type='text']").toArray();
+    // removemos posibles etiquetas vacias    
+    const arrayEtiquetasFiltrado = arrayEtiquetas.filter(etiqueta => etiqueta.value != "");    
     const valorEtiquetas = [];    
-    arrayEtiquetas.forEach(child => {
+    arrayEtiquetasFiltrado.forEach(child => {
         valorEtiquetas.push(child.value)
-    })       
+    })           
     const span = $('#nuevoProyAdvises');    
     const formData = new FormData();
 
@@ -316,9 +318,16 @@ function comprobarPDF(elemento) {
             $(span).removeAttr("class");
             $(span).addClass('text-danger');   
         } else {
-            $(span).html('PDF: ' + elemento.files[0].name)
-            $(span).removeAttr("class");
-            $(span).addClass('text-body');   
+            if (elemento.files[0].size > 20971520){
+                $(elemento).val('');
+                $(span).html('El máximo tamaño de archivo es de 20MB') 
+                $(span).removeAttr("class");
+                $(span).addClass('text-danger'); 
+            } else {
+                $(span).html('PDF: ' + elemento.files[0].name)
+                $(span).removeAttr("class");
+                $(span).addClass('text-body');   
+            }            
         }
     } else {
         $(span).html('No has seleccionado ningun archivo')

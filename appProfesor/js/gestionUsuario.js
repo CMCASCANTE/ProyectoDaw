@@ -68,9 +68,7 @@ function modificarDatos(id) {
     const nuevaPass = $('#passUsuario').val();
     const confPass = $('#confPassUsuario').val();
     const span = $('#confirmarDatos');
-    console.log(nuevaPass)
-    console.log(confPass)
-
+    
     // comprobamos valores, devolvemos error de no ser correctos
     if (nuevaPass === "" || nuevaPass != confPass) {
         $(span).html('La contraseña no coindice con su confirmación');
