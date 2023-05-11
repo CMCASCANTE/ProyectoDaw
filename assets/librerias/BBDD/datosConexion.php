@@ -4,7 +4,7 @@
     $host = "localhost";
     $db = "biblioteca";
     $user = "admin";
-    $pass = "Proyecto123";
+    $pass = "proyecto123";
     $charset = "utf8mb4";
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
     $conBBDD;
