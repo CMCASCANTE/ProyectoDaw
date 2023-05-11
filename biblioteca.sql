@@ -31,7 +31,7 @@ USE `biblioteca`;
 --
 -- Creacion de Usuario
 --
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'Proyecto123';
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'proyecto123';
 --
 -- Permisos del usuario
 --
