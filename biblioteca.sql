@@ -21,7 +21,23 @@
 -- Base de datos: `biblioteca`
 --
 
+--
+-- Creación de la base de datos
+--
+CREATE DATABASE IF NOT EXISTS `biblioteca` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `biblioteca`;
+
 -- --------------------------------------------------------
+--
+-- Creacion de Usuario
+--
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'Proyecto123';
+--
+-- Permisos del usuario
+--
+GRANT ALL PRIVILEGES ON biblioteca.* TO 'admin'@'localhost';
+-- ---------------------------------------------------------
+
 
 --
 -- Estructura de tabla para la tabla `permisos`
